@@ -41,6 +41,8 @@ const nameInput = document.getElementById("contact-name");
 const emailInput = document.getElementById("contact-email");
 const messageInput = document.getElementById("contact-message");
 const formFeedback = document.getElementById("form-feedback");
+const bannerImage = document.querySelector("#banner-image");
+const bannerCaption = document.querySelector("#banner-caption");
 
 let wishlistItems = [];
 
@@ -181,5 +183,12 @@ if (contactForm && nameInput && emailInput && messageInput && formFeedback) {
 		formFeedback.classList.remove("error");
 		formFeedback.classList.add("success");
 		contactForm.reset();
+	});
+}
+
+if (bannerImage && bannerCaption) {
+	bannerImage.addEventListener("click", function() {
+		bannerImage.classList.toggle("revealed");
+		bannerCaption.classList.toggle("revealed");
 	});
 }

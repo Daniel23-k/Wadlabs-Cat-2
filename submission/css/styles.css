@@ -175,6 +175,37 @@ h6 {
     min-height: 16rem;
     object-fit: cover;
     display: block;
+    cursor: pointer;
+}
+
+.hero-media {
+    position: relative;
+}
+
+.banner-caption {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    margin: 0;
+    padding: 0.7rem 0.9rem;
+    color: #ffffff;
+    background-color: rgba(23, 84, 91, 0.9);
+    border-radius: 0.6rem;
+    opacity: 0;
+    transform: translateY(0.4rem);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.banner-caption.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hero-media img.revealed {
+    outline: 0.2rem solid var(--accent);
+    outline-offset: -0.2rem;
 }
 
 /* Primary call-to-action button style */
