@@ -1,1 +1,31 @@
 
+CAT 2 implementation notes:
+
+1. Carry-over baseline:
+- Preserved required folder structure and baseline HTML/CSS content in submission.
+
+2. Loop-rendered dynamic services:
+- Services are stored in an array of objects in submission/js/script.js.
+- Each object includes a name property.
+- Services are rendered into #services-list with forEach(), createElement(), and appendChild().
+
+3. Dynamic wishlist add/remove:
+- Users add wishlist items from input using a button click event.
+- New items are generated with createElement() and appendChild().
+- Each item has its own Remove button and is removed with remove().
+- Empty entries and duplicate entries are rejected with feedback.
+
+4. Contact form handling and validation:
+- Contact form submit uses event.preventDefault().
+- Input values are read using .value.
+- Validation checks name length, email format, and message length.
+- Success and error feedback is displayed on page using textContent and innerHTML.
+
+5. Persistent state:
+- Wishlist items are saved and restored using localStorage.
+- Contact name is saved and restored using localStorage.
+
+6. Banner click-to-reveal:
+- Banner image click toggles a reveal class using classList.toggle().
+- Caption overlay appears/disappears when toggled.
+
