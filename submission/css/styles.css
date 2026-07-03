@@ -342,6 +342,34 @@ h6 {
     cursor: pointer;
 }
 
+.contact-form {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 0.55rem;
+    padding: 0.65rem 0.75rem;
+    font: inherit;
+}
+
+.form-feedback {
+    min-height: 1.3rem;
+    font-weight: 600;
+}
+
+.form-feedback.error {
+    color: #9a1f16;
+}
+
+.form-feedback.success {
+    color: var(--brand-dark);
+}
+
 .contact-section .cta.secondary {
     display: block;
     width: fit-content;

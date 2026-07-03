@@ -36,6 +36,11 @@ const wishlistInput = document.getElementById("wishlist-input");
 const addWishlistButton = document.getElementById("add-wishlist-btn");
 const wishlistList = document.getElementById("wishlist-list");
 const wishlistFeedback = document.getElementById("wishlist-feedback");
+const contactForm = document.getElementById("contact-form");
+const nameInput = document.getElementById("contact-name");
+const emailInput = document.getElementById("contact-email");
+const messageInput = document.getElementById("contact-message");
+const formFeedback = document.getElementById("form-feedback");
 
 let wishlistItems = [];
 
@@ -95,5 +100,46 @@ if (addWishlistButton && wishlistInput && wishlistList) {
 		wishlistItems.push(newItem);
 		wishlistInput.value = "";
 		setWishlistFeedback("Item added to wishlist.", false);
+	});
+}
+
+function getContactValidationError(nameValue, emailValue, messageValue) {
+	const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+	if (nameValue.length < 2) {
+		return "Please provide a name with at least 2 characters.";
+	}
+
+	if (!emailPattern.test(emailValue)) {
+		return "Please provide a valid email address.";
+	}
+
+	if (messageValue.length < 10) {
+		return "Please provide a message with at least 10 characters.";
+	}
+
+	return "";
+}
+
+if (contactForm && nameInput && emailInput && messageInput && formFeedback) {
+	contactForm.addEventListener("submit", function(event) {
+		event.preventDefault();
+
+		const nameValue = nameInput.value.trim();
+		const emailValue = emailInput.value.trim();
+		const messageValue = messageInput.value.trim();
+		const validationError = getContactValidationError(nameValue, emailValue, messageValue);
+
+		if (validationError) {
+			formFeedback.textContent = validationError;
+			formFeedback.classList.remove("success");
+			formFeedback.classList.add("error");
+			return;
+		}
+
+		formFeedback.innerHTML = "Request sent successfully. We will contact you soon.";
+		formFeedback.classList.remove("error");
+		formFeedback.classList.add("success");
+		contactForm.reset();
 	});
 }
