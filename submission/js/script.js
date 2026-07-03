@@ -44,6 +44,25 @@ const formFeedback = document.getElementById("form-feedback");
 
 let wishlistItems = [];
 
+const savedWishlist = localStorage.getItem("wishlistItems");
+if (savedWishlist) {
+	try {
+		const parsedWishlist = JSON.parse(savedWishlist);
+		if (Array.isArray(parsedWishlist)) {
+			wishlistItems = parsedWishlist;
+		}
+	} catch (error) {
+		wishlistItems = [];
+	}
+}
+
+if (nameInput) {
+	const savedName = localStorage.getItem("savedContactName");
+	if (savedName) {
+		nameInput.value = savedName;
+	}
+}
+
 function setWishlistFeedback(message, isError) {
 	if (!wishlistFeedback) {
 		return;
@@ -54,6 +73,45 @@ function setWishlistFeedback(message, isError) {
 	if (isError) {
 		wishlistFeedback.classList.add("error");
 	}
+}
+
+function saveWishlist() {
+	localStorage.setItem("wishlistItems", JSON.stringify(wishlistItems));
+}
+
+function renderWishlist() {
+	if (!wishlistList) {
+		return;
+	}
+
+	wishlistList.innerHTML = "";
+
+	wishlistItems.forEach(function(item) {
+		const listItem = document.createElement("li");
+		listItem.className = "wishlist-item";
+
+		const itemText = document.createElement("span");
+		itemText.textContent = item;
+
+		const removeButton = document.createElement("button");
+		removeButton.type = "button";
+		removeButton.className = "remove-btn";
+		removeButton.textContent = "Remove";
+
+		removeButton.addEventListener("click", function() {
+			wishlistItems = wishlistItems.filter(function(currentItem) {
+				return currentItem.toLowerCase() !== item.toLowerCase();
+			});
+			listItem.remove();
+			saveWishlist();
+			renderWishlist();
+			setWishlistFeedback("Item removed from wishlist.", false);
+		});
+
+		listItem.appendChild(itemText);
+		listItem.appendChild(removeButton);
+		wishlistList.appendChild(listItem);
+	});
 }
 
 if (addWishlistButton && wishlistInput && wishlistList) {
@@ -74,34 +132,15 @@ if (addWishlistButton && wishlistInput && wishlistList) {
 			return;
 		}
 
-		const listItem = document.createElement("li");
-		listItem.className = "wishlist-item";
-
-		const itemText = document.createElement("span");
-		itemText.textContent = newItem;
-
-		const removeButton = document.createElement("button");
-		removeButton.type = "button";
-		removeButton.className = "remove-btn";
-		removeButton.textContent = "Remove";
-
-		removeButton.addEventListener("click", function() {
-			wishlistItems = wishlistItems.filter(function(item) {
-				return item.toLowerCase() !== newItem.toLowerCase();
-			});
-			listItem.remove();
-			setWishlistFeedback("Item removed from wishlist.", false);
-		});
-
-		listItem.appendChild(itemText);
-		listItem.appendChild(removeButton);
-		wishlistList.appendChild(listItem);
-
 		wishlistItems.push(newItem);
+		saveWishlist();
+		renderWishlist();
 		wishlistInput.value = "";
 		setWishlistFeedback("Item added to wishlist.", false);
 	});
 }
+
+renderWishlist();
 
 function getContactValidationError(nameValue, emailValue, messageValue) {
 	const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -137,6 +176,7 @@ if (contactForm && nameInput && emailInput && messageInput && formFeedback) {
 			return;
 		}
 
+		localStorage.setItem("savedContactName", nameValue);
 		formFeedback.innerHTML = "Request sent successfully. We will contact you soon.";
 		formFeedback.classList.remove("error");
 		formFeedback.classList.add("success");
