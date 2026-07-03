@@ -31,3 +31,69 @@ if (serviceContainer) {
 		serviceContainer.appendChild(card);
 	});
 }
+
+const wishlistInput = document.getElementById("wishlist-input");
+const addWishlistButton = document.getElementById("add-wishlist-btn");
+const wishlistList = document.getElementById("wishlist-list");
+const wishlistFeedback = document.getElementById("wishlist-feedback");
+
+let wishlistItems = [];
+
+function setWishlistFeedback(message, isError) {
+	if (!wishlistFeedback) {
+		return;
+	}
+
+	wishlistFeedback.textContent = message;
+	wishlistFeedback.classList.remove("error");
+	if (isError) {
+		wishlistFeedback.classList.add("error");
+	}
+}
+
+if (addWishlistButton && wishlistInput && wishlistList) {
+	addWishlistButton.addEventListener("click", function() {
+		const newItem = wishlistInput.value.trim();
+
+		if (newItem.length === 0) {
+			setWishlistFeedback("Please enter an item before adding.", true);
+			return;
+		}
+
+		const duplicateItem = wishlistItems.some(function(item) {
+			return item.toLowerCase() === newItem.toLowerCase();
+		});
+
+		if (duplicateItem) {
+			setWishlistFeedback("That item is already in your wishlist.", true);
+			return;
+		}
+
+		const listItem = document.createElement("li");
+		listItem.className = "wishlist-item";
+
+		const itemText = document.createElement("span");
+		itemText.textContent = newItem;
+
+		const removeButton = document.createElement("button");
+		removeButton.type = "button";
+		removeButton.className = "remove-btn";
+		removeButton.textContent = "Remove";
+
+		removeButton.addEventListener("click", function() {
+			wishlistItems = wishlistItems.filter(function(item) {
+				return item.toLowerCase() !== newItem.toLowerCase();
+			});
+			listItem.remove();
+			setWishlistFeedback("Item removed from wishlist.", false);
+		});
+
+		listItem.appendChild(itemText);
+		listItem.appendChild(removeButton);
+		wishlistList.appendChild(listItem);
+
+		wishlistItems.push(newItem);
+		wishlistInput.value = "";
+		setWishlistFeedback("Item added to wishlist.", false);
+	});
+}
